@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f5f2ea;--card:#fffdf8;--ink:#1d1b16;--muted:#726c61;--line:#e6dfd0;--teal:#0f5c52;--teal-d:#0a463d;--amber:#b4790a;--green:#1f7a44;--red:#b3261e;--shadow:0 1px 2px rgba(29,27,22,.04),0 10px 30px rgba(29,27,22,.10);}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.mono{font-family:"IBM Plex Mono",monospace;font-size:12px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 22px;border-bottom:1px solid var(--line);background:var(--card)}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand h1{font-family:"Fraunces",serif;font-weight:600;font-size:22px;margin:0;letter-spacing:-.01em;color:var(--teal-d)}
+.brand span{color:var(--muted);font-size:13px}
+.who{display:flex;align-items:center;gap:12px;font-size:13px}
+nav{display:flex;gap:0;padding:0 22px;border-bottom:1px solid var(--line);background:var(--card)}
+nav button{font:inherit;font-size:13px;font-weight:600;border:0;background:none;color:var(--muted);padding:11px 16px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+nav button.on{color:var(--teal-d);border-bottom-color:var(--teal)}
+.panel{padding:22px 24px;display:none}
+.panel.on{display:block}
+/* stat cards */
+.cards{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:26px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;flex:1;min-width:140px;box-shadow:var(--shadow)}
+.card .num{font-family:"Fraunces",serif;font-size:32px;font-weight:600;margin:0;line-height:1}
+.card .lab{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;margin-top:6px}
+h2.sec{font-family:"Fraunces",serif;font-weight:600;font-size:17px;margin:24px 0 10px;color:var(--ink)}
+h2.sec:first-child{margin-top:0}
+h3.sub{font-size:13px;font-weight:600;margin:0 0 10px}
+/* tables */
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:2px;font-size:13px}
+thead th{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);text-align:left;padding:9px 13px;border-bottom:1px solid var(--line);background:#faf7ef;white-space:nowrap}
+tbody td{padding:9px 13px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#fbf8f0}
+/* pagination */
+.paging{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;font-size:12px;color:var(--muted)}
+.paging .pinfo{text-align:center;flex:1}
+.paging button{border:1px solid var(--line);background:var(--card);border-radius:6px;padding:5px 12px;cursor:pointer;font:inherit;font-size:12px;color:var(--ink)}
+.paging button:hover:not(:disabled){border-color:var(--teal);color:var(--teal-d)}
+.paging button:disabled{opacity:.35;cursor:not-allowed}
+/* forms */
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.box .label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+input[type=text],select,textarea{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--card);color:var(--ink)}
+input[type=text]:focus,select:focus,textarea:focus{outline:2px solid var(--teal);outline-offset:-1px}
+textarea{font-family:"IBM Plex Mono",monospace;font-size:12px;width:100%;min-height:180px;resize:vertical}
+.btn{font:inherit;font-size:13px;font-weight:600;border:0;border-radius:9px;padding:8px 16px;cursor:pointer;background:var(--teal);color:#fff;white-space:nowrap}
+.btn:hover{background:var(--teal-d)}
+.btn.sm{padding:6px 11px;font-size:12px}
+.btn.outline{background:none;color:var(--ink);border:1px solid var(--line)}
+.btn.outline:hover{border-color:var(--teal);color:var(--teal-d)}
+.btn.danger{background:none;color:var(--red);border:1px solid var(--line)}
+.btn.danger:hover{background:var(--red);color:#fff;border-color:var(--red)}
+/* form links grid */
+.links{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.link-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+.link-card .cls{font-weight:600;margin-bottom:6px}
+.link-card .url{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);background:#f5f2ea;padding:5px 7px;border-radius:4px;word-break:break-all;margin-bottom:8px}
+.link-card .acts{display:flex;gap:6px}
+.link-card .acts button{font:inherit;font-size:11px;padding:4px 9px;border:1px solid var(--line);background:none;border-radius:5px;cursor:pointer;color:var(--teal-d)}
+.link-card .acts button:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+.hint{font-size:12px;color:var(--muted);margin:4px 0 10px}
+.status{font-size:12px;color:var(--muted);margin-left:8px}
+.status.ok{color:var(--green)}.status.err{color:var(--red)}
+.hint.err{color:var(--red)}
+/* domain tags */
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.tag{display:inline-flex;align-items:center;gap:4px;background:#eaf2f0;color:var(--teal-d);border:1px solid #c5ddd9;border-radius:20px;padding:3px 10px;font-size:12px}
+.tag button{background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;line-height:1;padding:0 0 0 2px}
+.tag button:hover{color:var(--red)}
+/* manage entity bar */
+.ebar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.ebar button{font:inherit;font-size:12px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:6px 13px;cursor:pointer}
+.ebar button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(29,27,22,.45);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;z-index:40;overflow:auto}
+.overlay.show{display:flex}
+.modal{background:var(--paper);width:100%;max-width:500px;border-radius:16px;box-shadow:var(--shadow);padding:24px}
+.modal h3{font-family:"Fraunces",serif;font-weight:600;margin:0 0 14px;font-size:19px}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:11px;color:var(--muted);margin:0 0 4px;text-transform:uppercase;letter-spacing:.03em;font-weight:600}
+.field input,.field select{width:100%}
+.field input[readonly]{background:#efeadf;color:var(--muted)}
+.mactions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+/* toast / spinner */
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;box-shadow:var(--shadow);z-index:60}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}#toast.err{background:var(--red)}
+.spin{width:26px;height:26px;border:3px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:sp .8s linear infinite;margin:30px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+/* evidence overlay */
+.ev-overlay{position:fixed;inset:0;background:rgba(29,27,22,.55);display:none;align-items:flex-start;justify-content:center;padding:24px 16px;z-index:50;overflow:auto}
+.ev-overlay.show{display:flex}
+.ev-modal{background:var(--paper);width:100%;max-width:860px;border-radius:16px;box-shadow:var(--shadow);padding:22px 24px;display:flex;flex-direction:column;gap:14px}
+.ev-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.ev-iframe{width:100%;height:520px;border:1px solid var(--line);border-radius:10px;background:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><h1>Evidence</h1><span>Administration</span></div>
+  <div class="who"><span id="userName">…</span></div>
+</header>
+
+<nav>
+  <button data-tab="reports" class="on">Reports</button>
+  <button data-tab="evidence">Evidence</button>
+  <button data-tab="form">Form &amp; Links</button>
+  <button data-tab="manage">Manage Data</button>
+  <button data-tab="import">Import</button>
+  <button data-tab="settings">Settings</button>
+  <button data-tab="logs">Logs</button>
+</nav>
+
+<!-- ═══════════════ REPORTS ═══════════════ -->
+<div class="panel on" id="p-reports">
+  <div id="reportBody"><div class="spin"></div></div>
+</div>
+
+<!-- ═══════════════ EVIDENCE ═══════════════ -->
+<div class="panel" id="p-evidence">
+  <h2 class="sec" style="margin-top:0">Evidence Viewer</h2>
+  <div class="box">
+    <div class="row" style="flex-wrap:wrap;gap:12px;align-items:flex-end">
+      <div>
+        <div class="label" style="margin-bottom:4px">Programme</div>
+        <select id="evProg" style="min-width:200px"></select>
+      </div>
+      <div>
+        <div class="label" style="margin-bottom:4px">Class</div>
+        <select id="evClass" style="min-width:180px"></select>
+      </div>
+      <div>
+        <div class="label" style="margin-bottom:4px">Unit <span style="color:var(--red)">*</span></div>
+        <select id="evUnit" style="min-width:240px"></select>
+      </div>
+      <button class="btn" id="evApplyBtn" disabled>Apply</button>
+    </div>
+    <div class="hint" style="margin-top:8px;margin-bottom:0">Choose a Programme or Class, then select a Unit. Both are required before anything loads.</div>
+  </div>
+  <div id="evResults"></div>
+</div>
+
+<!-- Evidence preview overlay -->
+<div class="ev-overlay" id="evOverlay"><div class="ev-modal" id="evModal"></div></div>
+
+<!-- ═══════════════ PROGRAMME FORMS ═══════════════ -->
+<div class="panel" id="p-form">
+  <h2 class="sec" style="margin-top:0">Registration Form</h2>
+  <div class="hint">A single form for all students to register before submitting evidence. Automatically installs the processing trigger on creation.</div>
+  <div class="box">
+    <div class="row" style="margin-bottom:8px">
+      <button class="btn" id="getRegFormBtn">Get / Create Registration Form</button>
+      <button class="btn outline" id="refreshRegFormBtn">↻ Refresh Class list</button>
+      <span class="status" id="regFormStatus"></span>
+    </div>
+    <div id="regFormResult"></div>
+  </div>
+
+  <h2 class="sec">Programme Forms</h2>
+  <div class="hint">Creating a form <b>copies the master form</b> (keeping the 7 uploads), locks the Programme, and scopes the Unit dropdown to that programme.</div>
+  <div class="box">
+    <div class="row" style="margin-bottom:8px">
+      <select id="progSelect" style="min-width:240px"><option value="">— Select a programme —</option></select>
+      <button class="btn" id="createFormBtn">Create Form</button>
+      <span class="status" id="createFormStatus"></span>
+    </div>
+    <div class="hint">Master template: <span class="mono"><?= masterFormId ?></span></div>
+  </div>
+
+  <h2 class="sec">Programme Forms Created</h2>
+  <div id="formsBody"><div class="spin"></div></div>
+
+  <h2 class="sec">Submission Sync</h2>
+  <div class="box">
+    <div class="hint">Move new Google Form uploads into the Drive repository. Manual sync runs now; automatic sync runs on the selected schedule.</div>
+    <div class="row" style="margin-bottom:8px">
+      <button class="btn" id="syncNowBtn">Sync Now</button>
+      <span class="status" id="syncNowStatus"></span>
+    </div>
+    <div class="row">
+      <select id="syncEnabled">
+        <option value="true">Automatic sync on</option>
+        <option value="false">Automatic sync off</option>
+      </select>
+      <select id="syncFrequency">
+        <option value="daily">Daily at</option>
+        <option value="hourly">Every</option>
+      </select>
+      <span id="dailyControls" style="display:inline-flex;gap:4px">
+        <select id="syncHour"></select>
+        <select id="syncMinute"></select>
+      </span>
+      <select id="syncInterval" style="display:none">
+        <option value="1">1 hour</option>
+        <option value="2">2 hours</option>
+        <option value="4">4 hours</option>
+        <option value="6">6 hours</option>
+        <option value="12">12 hours</option>
+      </select>
+      <button class="btn outline" id="saveSyncBtn">Save Schedule</button>
+      <span class="status" id="syncScheduleStatus"></span>
+    </div>
+    <div class="hint" id="lastSyncInfo"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ MANAGE DATA ═══════════════ -->
+<div class="panel" id="p-manage">
+  <div class="box" style="margin-bottom:20px">
+    <div class="label">File Retention</div>
+    <div class="hint">Move evidence files older than 9 months to Drive trash.</div>
+    <div class="row">
+      <button class="btn" id="runCleanupBtn">Run Cleanup Now</button>
+      <span class="status" id="cleanupStatus"></span>
+    </div>
+  </div>
+  <div class="ebar" id="ebar"></div>
+  <div class="toolbar">
+    <span class="mono" id="entityTitle"></span>
+    <button class="btn sm" id="addBtn">+ Add</button>
+  </div>
+  <div id="entityTable"></div>
+</div>
+
+<!-- ═══════════════ IMPORT ═══════════════ -->
+<div class="panel" id="p-import">
+  <h2 class="sec" style="margin-top:0">Bulk Import</h2>
+  <div class="box" style="margin-bottom:16px">
+    <div class="label">Step 1 — Generate Template</div>
+    <div class="hint">Creates a Google Sheet pre-filled with your current Programmes, Classes, and Units. Each tab has dropdowns and auto-filled ID columns so you only type names. When done, copy a tab and paste it into the import area below.</div>
+    <div class="row">
+      <button class="btn" id="genTemplateBtn">Generate Import Template ↗</button>
+      <span class="status" id="genTemplateStatus"></span>
+    </div>
+  </div>
+  <div class="box" style="margin-bottom:16px"><div class="label" style="margin-bottom:2px">Step 2 — Paste &amp; Import</div></div>
+  <div class="box">
+    <div class="label">Target</div>
+    <div class="row" style="margin-bottom:10px">
+      <select id="impEntity">
+        <option value="students">Students</option>
+        <option value="units">Units</option>
+        <option value="classes">Classes</option>
+        <option value="programmes">Programmes</option>
+      </select>
+      <button class="btn outline" id="dlTemplateBtn">⬇ Download Template</button>
+    </div>
+    <div class="hint" id="impCols"></div>
+    <div class="hint" style="margin-top:4px;color:var(--amber)">ID columns marked <b>(auto)</b> should be left blank — the system assigns them on import.</div>
+  </div>
+  <textarea id="impText" placeholder="Paste rows here (tab-separated from Google Sheets, or CSV). First row = column headers."></textarea>
+  <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+    <button class="btn" id="impBtn">Import</button>
+  </div>
+  <div id="impResult" style="margin-top:10px;font-size:13px"></div>
+</div>
+
+<!-- ═══════════════ SETTINGS ═══════════════ -->
+<div class="panel" id="p-settings">
+  <h2 class="sec" style="margin-top:0">Allowed Email Domains</h2>
+  <div class="hint">Only users with emails from these domains can submit evidence or access the admin portal. Add the domain without the @ symbol (e.g. <span class="mono">rvnp.ac.ke</span>).</div>
+  <div class="box">
+    <div id="domainTags" class="tags"></div>
+    <div class="row" style="margin-top:4px">
+      <input type="text" id="newDomainInput" placeholder="e.g. example.ac.ke" style="min-width:200px">
+      <button class="btn outline sm" id="addDomainBtn">Add domain</button>
+    </div>
+    <div style="margin-top:12px">
+      <button class="btn" id="saveDomainsBtn">Save Domains</button>
+      <span class="status" id="domainsStatus"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ LOGS ═══════════════ -->
+<div class="panel" id="p-logs">
+  <h2 class="sec" style="margin-top:0">System Diagnostics</h2>
+  <div id="sysInfoBody"><div class="hint">Loading…</div></div>
+
+  <h2 class="sec" style="margin-top:24px">Activity Log</h2>
+  <div class="hint">Recent events from form syncs and submission processing. Newest first. Stores the last 40 entries.</div>
+  <div class="row" style="margin-bottom:10px;gap:8px">
+    <button class="btn outline sm" id="refreshLogsBtn">↻ Refresh</button>
+    <button class="btn danger sm" id="clearLogsBtn">Clear log</button>
+    <span class="status" id="logsStatus"></span>
+  </div>
+  <div id="logsBody"><div class="spin"></div></div>
+</div>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+<div id="toast"></div>
+
+<script>
+var DATA = null;
+var ENT = 'programmes', MPAGE = 1, MPAGESIZE = 15;
+var RPSIZE = 15, RCLSP = 1;
+var RDATA = null;
+var _currentDomains = [];
+
+var KEYS   = {programmes:'programme_id',classes:'class_id',units:'unit_id',students:'student_id'};
+var LABELS = {programmes:'Programmes',classes:'Classes',units:'Units',students:'Students'};
+var FIELDS = {
+  programmes:[{k:'programme_id',t:'auto'},{k:'programme_name',t:'text'}],
+  classes:   [{k:'class_id',t:'auto'},{k:'class_name',t:'text'},{k:'programme_id',t:'fk',src:'programmes',kk:'programme_id',kn:'programme_name'}],
+  units:     [{k:'unit_id',t:'auto'},{k:'unit_code',t:'text'},{k:'unit_name',t:'text'},{k:'programme_id',t:'fk',src:'programmes',kk:'programme_id',kn:'programme_name'}],
+  students:  [{k:'student_id',t:'text'},{k:'name',t:'text'},{k:'email',t:'text'},{k:'admission_no',t:'text'},{k:'class_id',t:'fk',src:'classes',kk:'class_id',kn:'class_name'},{k:'programme_id',t:'fk',src:'programmes',kk:'programme_id',kn:'programme_name'}]
+};
+var IMPCOLS = {
+  programmes:'programme_id, programme_name',
+  classes:'class_id, class_name, programme_id',
+  units:'unit_id, unit_code, unit_name, programme_id',
+  students:'student_id, name, email, admission_no, class_id, programme_id'
+};
+var TEMPLATES = {
+  programmes:{note:'programme_id is auto-assigned.',rows:[['programme_id','programme_name'],['','Electrical Installation'],['','Automotive Engineering']]},
+  classes:{note:'class_id is auto-assigned. programme_id must match an existing Programme ID.',rows:[['class_id','class_name','programme_id'],['','Morning Class','1'],['','Evening Class','1']]},
+  units:{note:'unit_id is auto-assigned. programme_id must match an existing Programme ID.',rows:[['unit_id','unit_code','unit_name','programme_id'],['','EE101','Introduction to Electrical Theory','1'],['','EE102','Electrical Wiring Practice','1']]},
+  students:{note:'student_id is auto-assigned. class_id and programme_id must match existing IDs.',rows:[['student_id','name','email','admission_no','class_id','programme_id'],['','John Doe','john@rvnp.ac.ke','ADM/2024/001','1','1']]}
+};
+
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function toast(m,err){ var t=$('toast');t.textContent=m;t.className='show'+(err?' err':'');setTimeout(function(){t.className='';},2800); }
+function setStatus(id,msg,ok){ var el=$(id);el.textContent=msg;el.className='status'+(ok===false?' err':ok===true?' ok':''); }
+
+/* ── boot ── */
+google.script.run.withSuccessHandler(function(c){ $('userName').textContent=c.name||c.email; }).getContext('ADMIN');
+loadData(function(){ loadReports(); buildFormTab(); buildEbar(); });
+var _logsLoaded=false, _evLoaded=false;
+
+function loadData(cb){
+  google.script.run
+    .withSuccessHandler(function(d){ DATA=d; if(cb)cb(); })
+    .withFailureHandler(function(e){ toast(e.message,true); })
+    .adminGetAllData();
+}
+
+/* ── tab switching ── */
+Array.prototype.forEach.call(document.querySelectorAll('nav button'),function(b){
+  b.onclick=function(){
+    Array.prototype.forEach.call(document.querySelectorAll('nav button'),function(x){x.classList.remove('on');});
+    Array.prototype.forEach.call(document.querySelectorAll('.panel'),function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    var tab=b.getAttribute('data-tab');
+    $('p-'+tab).classList.add('on');
+    if(tab==='logs'&&!_logsLoaded){ _logsLoaded=true; loadSystemInfo(); loadLogs(); }
+    if(tab==='settings') loadDomains();
+    if(tab==='evidence'&&!_evLoaded){ _evLoaded=true; initEvidenceTab(); }
+  };
+});
+
+/* ══════════════════════════════════════════
+   REPORTS
+══════════════════════════════════════════ */
+function loadReports(){
+  $('reportBody').innerHTML='<div class="spin"></div>';
+  google.script.run.withSuccessHandler(renderReports).withFailureHandler(function(e){$('reportBody').innerHTML=esc(e.message);}).adminReports();
+}
+
+function renderReports(r){
+  RDATA=r; RCLSP=1;
+  var h='<div class="cards">';
+  h+='<div class="card"><div class="num">'+r.totalStudents+'</div><div class="lab">Students</div></div>';
+  h+='<div class="card"><div class="num">'+r.totalProgrammes+'</div><div class="lab">Programmes</div></div>';
+  h+='<div class="card"><div class="num">'+r.totalClasses+'</div><div class="lab">Classes</div></div>';
+  h+='<div class="card"><div class="num">'+r.totalUnits+'</div><div class="lab">Units</div></div>';
+  h+='</div>';
+  if(r.trackerUrl){
+    h+='<div class="box" style="margin-bottom:20px">';
+    h+='<div class="label">Student Folder Tracker</div>';
+    h+='<div class="hint">Each programme\'s tab lists students who have submitted, along with their Drive folder link.</div>';
+    h+='<a href="'+esc(r.trackerUrl)+'" target="_blank"><button class="btn outline sm">Open Tracker Spreadsheet ↗</button></a>';
+    h+='</div>';
+  }
+  h+='<h2 class="sec">Students per class</h2><div id="clsTableWrap"></div>';
+  $('reportBody').innerHTML=h;
+  renderClsTable();
+}
+
+function renderClsTable(){
+  var rows=RDATA.byClass;
+  var total=rows.length, pages=Math.max(1,Math.ceil(total/RPSIZE));
+  var start=(RCLSP-1)*RPSIZE, pageRows=rows.slice(start,start+RPSIZE);
+  var h='<table><thead><tr><th>Class</th><th>Programme</th><th style="text-align:right">Students</th></tr></thead><tbody>';
+  pageRows.forEach(function(c){
+    h+='<tr><td>'+esc(c.className)+'</td><td>'+esc(c.programme)+'</td><td style="text-align:right">'+c.students+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  h+=pager(RCLSP,pages,'rclsGo');
+  $('clsTableWrap').innerHTML=h;
+  wirePager('rclsGo',RCLSP,pages,function(p){RCLSP=p;renderClsTable();});
+}
+
+/* ══════════════════════════════════════════
+   PROGRAMME FORMS
+══════════════════════════════════════════ */
+function buildFormTab(){
+  $('getRegFormBtn').onclick=function(){
+    $('getRegFormBtn').disabled=true; setStatus('regFormStatus','Loading…');
+    google.script.run
+      .withSuccessHandler(function(r){
+        $('getRegFormBtn').disabled=false;
+        setStatus('regFormStatus','✓ Ready',true);
+        renderRegForm(r);
+      })
+      .withFailureHandler(function(e){
+        $('getRegFormBtn').disabled=false;
+        setStatus('regFormStatus','✗ '+e.message,false);
+        toast(e.message,true);
+      })
+      .adminGetOrCreateRegistrationForm();
+  };
+
+  $('refreshRegFormBtn').onclick=function(){
+    $('refreshRegFormBtn').disabled=true; setStatus('regFormStatus','Refreshing Class list…');
+    google.script.run
+      .withSuccessHandler(function(r){
+        $('refreshRegFormBtn').disabled=false;
+        setStatus('regFormStatus','✓ '+r.classes+' class(es) on form',true);
+        toast('Registration form Class list updated.');
+      })
+      .withFailureHandler(function(e){
+        $('refreshRegFormBtn').disabled=false;
+        setStatus('regFormStatus','✗ '+e.message,false);
+        toast(e.message,true);
+      })
+      .adminRefreshRegistrationForm();
+  };
+
+  var progs=DATA.programmes||[];
+  var html='<option value="">— Select a programme —</option>';
+  progs.forEach(function(p){html+='<option value="'+esc(p.programme_id)+'">'+esc(p.programme_name)+'</option>';});
+  $('progSelect').innerHTML=html;
+
+  $('createFormBtn').onclick=function(){
+    var pid=$('progSelect').value;
+    if(!pid){toast('Select a programme.',true);return;}
+    if(!window.confirm('Copy the master form for this programme and set it up?')) return;
+    $('createFormBtn').disabled=true; setStatus('createFormStatus','Creating form…');
+    google.script.run
+      .withSuccessHandler(function(r){
+        $('createFormBtn').disabled=false;
+        setStatus('createFormStatus','✓ Form created.',true);
+        loadProgrammeForms();
+        openFixUploadPopup_(r.editUrl,'');
+      })
+      .withFailureHandler(function(e){$('createFormBtn').disabled=false;setStatus('createFormStatus','✗ '+e.message,false);toast(e.message,true);})
+      .adminCreateProgrammeForm(pid);
+  };
+
+  loadProgrammeForms();
+  buildSyncControls();
+  loadSyncSettings();
+}
+
+function updateSyncFrequencyDisplay(){
+  var isHourly=$('syncFrequency').value==='hourly';
+  $('dailyControls').style.display=isHourly?'none':'inline-flex';
+  $('syncInterval').style.display=isHourly?'':'none';
+}
+
+function buildSyncControls(){
+  var h='',m='';
+  for(var i=0;i<24;i++){var hh=('0'+i).slice(-2);h+='<option value="'+i+'">'+hh+':00</option>';}
+  for(var j=0;j<60;j+=5){var mm=('0'+j).slice(-2);m+='<option value="'+j+'">'+mm+'</option>';}
+  $('syncHour').innerHTML=h; $('syncMinute').innerHTML=m;
+  $('syncFrequency').onchange=updateSyncFrequencyDisplay;
+  updateSyncFrequencyDisplay();
+
+  $('syncNowBtn').onclick=function(){
+    $('syncNowBtn').disabled=true; setStatus('syncNowStatus','Syncing...');
+    google.script.run
+      .withSuccessHandler(function(r){
+        $('syncNowBtn').disabled=false;
+        setStatus('syncNowStatus','Checked:'+r.checked+' Processed:'+r.processed+' Skipped:'+r.skipped+(r.errors?' Errors:'+r.errors:''),r.errors?false:true);
+        toast('Sync complete. '+r.processed+' new submission(s) processed.',!!r.errors);
+        loadReports(); loadSyncSettings();
+      })
+      .withFailureHandler(function(e){$('syncNowBtn').disabled=false;setStatus('syncNowStatus',e.message,false);toast(e.message,true);})
+      .adminSyncNow();
+  };
+
+  $('saveSyncBtn').onclick=function(){
+    $('saveSyncBtn').disabled=true; setStatus('syncScheduleStatus','Saving...');
+    google.script.run
+      .withSuccessHandler(function(s){$('saveSyncBtn').disabled=false;renderSyncSettings(s);setStatus('syncScheduleStatus',s.enabled?'Schedule saved.':'Automatic sync off.',true);toast('Sync schedule saved.');})
+      .withFailureHandler(function(e){$('saveSyncBtn').disabled=false;setStatus('syncScheduleStatus',e.message,false);toast(e.message,true);})
+      .adminSaveSyncSettings({enabled:$('syncEnabled').value,frequency:$('syncFrequency').value,hour:$('syncHour').value,minute:$('syncMinute').value,intervalHours:$('syncInterval').value});
+  };
+}
+
+function loadSyncSettings(){
+  google.script.run.withSuccessHandler(renderSyncSettings).withFailureHandler(function(e){setStatus('syncScheduleStatus',e.message,false);}).adminGetSyncSettings();
+}
+
+function renderSyncSettings(s){
+  s=s||{};
+  $('syncEnabled').value=String(!!s.enabled);
+  $('syncFrequency').value=s.frequency||'daily';
+  $('syncHour').value=String(s.hour!=null?s.hour:7);
+  $('syncMinute').value=String(s.minute!=null?s.minute:0);
+  $('syncInterval').value=String(s.intervalHours||1);
+  updateSyncFrequencyDisplay();
+  var when=s.lastSyncAt?new Date(s.lastSyncAt).toLocaleString():'Never';
+  var isHourly=(s.frequency||'daily')==='hourly';
+  var schDesc=s.enabled?(isHourly?'Every '+s.intervalHours+' hour(s).':'Daily at '+('0'+(s.hour||0)).slice(-2)+':'+('0'+(s.minute||0)).slice(-2)+'.'):'Automatic sync off.';
+  $('lastSyncInfo').textContent='Last sync: '+when+' | '+schDesc;
+}
+
+function renderRegForm(r){
+  var h='<div class="link-card" style="margin-top:8px">';
+  h+='<div class="cls">Student Registration</div>';
+  h+='<div class="url">'+esc(r.url)+'</div>';
+  h+='<div class="acts">';
+  h+='<button onclick="copyText(\''+esc(r.url)+'\')">Copy link</button>';
+  h+='<a href="'+esc(r.editUrl)+'" target="_blank"><button>Edit form</button></a>';
+  h+='</div></div>';
+  $('regFormResult').innerHTML=h;
+}
+
+function loadProgrammeForms(){
+  $('formsBody').innerHTML='<div class="spin"></div>';
+  google.script.run.withSuccessHandler(renderProgrammeForms).withFailureHandler(function(e){$('formsBody').innerHTML='<div class="hint">'+esc(e.message)+'</div>';}).adminGetProgrammeForms();
+}
+
+function renderProgrammeForms(forms){
+  if(!forms.length){$('formsBody').innerHTML='<div class="hint">No programme forms created yet.</div>';return;}
+  var h='<div class="links">';
+  forms.forEach(function(f){
+    var pid=esc(f.programmeId),eurl=esc(f.editUrl),furl=esc(f.url);
+    h+='<div class="link-card">';
+    if(!f.uploadFixed){
+      h+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">';
+      h+='<div class="cls" style="margin:0">'+esc(f.programmeName)+'</div>';
+      h+='<span style="font-size:10px;font-weight:600;background:#fff0c2;color:#7a5000;border:1px solid #e0a800;border-radius:20px;padding:2px 8px;white-space:nowrap">⚠ Setup required</span>';
+      h+='</div>';
+      h+='<div class="acts">';
+      h+='<button onclick="openFixUploadPopup_(\''+eurl+'\',\''+pid+'\')">Open editor ↗</button>';
+      h+='<button onclick="markFormFixed(\''+pid+'\')" style="background:var(--teal);color:#fff;border-color:var(--teal)">Done — activate</button>';
+      h+='<button onclick="deleteProgrammeForm(\''+pid+'\')">Remove</button>';
+      h+='</div>';
+    } else {
+      var surl=esc(f.shortUrl||f.url);
+      h+='<div class="cls">'+esc(f.programmeName)+'</div>';
+      h+='<div style="display:flex;align-items:center;gap:6px;margin:4px 0 8px">';
+      h+='<div class="url" style="margin:0;flex:1">'+surl+'</div>';
+      if(f.shortUrl&&f.shortUrl!==f.url){h+='<span title="Full URL: '+furl+'" style="font-size:10px;color:var(--muted);cursor:help;white-space:nowrap">full ↗</span>';}
+      h+='</div>';
+      h+='<div class="acts">';
+      h+='<button onclick="copyText(\''+surl+'\')">Copy link</button>';
+      h+='<a href="'+eurl+'" target="_blank"><button>Edit form</button></a>';
+      h+='<button onclick="refreshProgrammeForm(\''+pid+'\')">Refresh</button>';
+      h+='<button onclick="deleteProgrammeForm(\''+pid+'\')">Remove</button>';
+      h+='</div>';
+    }
+    h+='</div>';
+  });
+  h+='</div>';
+  $('formsBody').innerHTML=h;
+}
+
+function openFixUploadPopup_(editUrl,pid){
+  var h='<h3 style="margin:0 0 12px">Activate File Uploads</h3>';
+  h+='<p style="margin:0 0 12px;font-size:13px;color:var(--muted)">Your form was created. Because Google Forms loses its upload folder when a form is copied, you need to do a quick one-time fix:</p>';
+  h+='<ol style="margin:0 0 16px;padding-left:18px;font-size:13px;line-height:1.8">';
+  h+='<li>Click <b>Open editor</b> below — the form editor opens in a new tab.</li>';
+  h+='<li>Click the yellow <b>"Fix file upload settings"</b> banner at the top of the editor.</li>';
+  h+='<li>Return here and click <b>Done — activate</b> on the form card.</li>';
+  h+='</ol>';
+  h+='<div class="mactions"><button class="btn outline" onclick="closeModal()">Close</button><button class="btn" onclick="goToEditor_(\''+editUrl+'\')">Open editor ↗</button></div>';
+  $('modal').innerHTML=h; $('overlay').classList.add('show');
+  $('overlay').onclick=function(e){if(e.target===$('overlay'))closeModal();};
+}
+
+function goToEditor_(editUrl){ window.open(editUrl,'_blank'); closeModal(); }
+
+function markFormFixed(pid){
+  google.script.run
+    .withSuccessHandler(function(){loadProgrammeForms();toast('File uploads activated. Copy link is now available.');})
+    .withFailureHandler(function(e){toast(e.message,true);})
+    .adminMarkFormFixed(pid);
+}
+
+function deleteProgrammeForm(pid){
+  if(!window.confirm('Remove this programme form from the list? (The Google Form itself is not deleted.)')) return;
+  google.script.run
+    .withSuccessHandler(function(){loadProgrammeForms();toast('Removed.');})
+    .withFailureHandler(function(e){toast(e.message,true);})
+    .adminDeleteProgrammeForm(pid);
+}
+
+function refreshProgrammeForm(pid){
+  if(!window.confirm('Re-configure this form? The Class and Unit dropdowns will be updated to reflect the latest data.')) return;
+  google.script.run
+    .withSuccessHandler(function(){loadProgrammeForms();toast('Form refreshed — dropdowns updated.');})
+    .withFailureHandler(function(e){toast(e.message,true);})
+    .adminUpdateProgrammeForm(pid);
+}
+
+function copyText(t){
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(t).then(function(){toast('Copied!');}).catch(function(){legacyCopy_(t);});
+  } else { legacyCopy_(t); }
+}
+function legacyCopy_(t){
+  var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');toast('Copied!');}catch(e){toast('Copy failed.',true);}
+  document.body.removeChild(ta);
+}
+
+/* ══════════════════════════════════════════
+   MANAGE DATA
+══════════════════════════════════════════ */
+$('runCleanupBtn').onclick=function(){
+  if(!window.confirm('Move evidence files older than 9 months to Drive trash. Continue?')) return;
+  $('runCleanupBtn').disabled=true; setStatus('cleanupStatus','Running…');
+  google.script.run
+    .withSuccessHandler(function(r){$('runCleanupBtn').disabled=false;setStatus('cleanupStatus','✓ Checked:'+r.checked+' Deleted:'+r.deleted+(r.errors?' Errors:'+r.errors:''),true);toast('Cleanup done. '+r.deleted+' files trashed.');})
+    .withFailureHandler(function(e){$('runCleanupBtn').disabled=false;setStatus('cleanupStatus','✗ '+e.message,false);toast(e.message,true);})
+    .adminRunFileCleanup(9);
+};
+
+function buildEbar(){
+  var html=Object.keys(LABELS).map(function(e){return '<button data-e="'+e+'"'+(e===ENT?' class="on"':'')+'>'+LABELS[e]+'</button>';}).join('');
+  $('ebar').innerHTML=html;
+  Array.prototype.forEach.call($('ebar').querySelectorAll('button'),function(b){
+    b.onclick=function(){MPAGE=1;ENT=b.getAttribute('data-e');buildEbar();renderEntity();};
+  });
+  renderEntity();
+  $('addBtn').onclick=function(){openForm(null);};
+}
+
+function fkName(src,kk,kn,val){
+  var row=(DATA[src]||[]).filter(function(x){return String(x[kk])===String(val);})[0];
+  return row?row[kn]:val;
+}
+
+function renderEntity(){
+  $('entityTitle').textContent=LABELS[ENT];
+  var fields=FIELDS[ENT],all=DATA[ENT]||[];
+  var total=all.length,pages=Math.max(1,Math.ceil(total/MPAGESIZE));
+  if(MPAGE>pages)MPAGE=pages;
+  var rows=all.slice((MPAGE-1)*MPAGESIZE,MPAGE*MPAGESIZE);
+  var h='<table><thead><tr>';
+  fields.forEach(function(f){h+='<th>'+esc(f.k)+'</th>';});
+  h+='<th></th></tr></thead><tbody>';
+  if(rows.length){
+    rows.forEach(function(r){
+      var key=String(r[KEYS[ENT]]);
+      h+='<tr>';
+      fields.forEach(function(f){
+        var v=r[f.k];
+        if(f.t==='fk')v=fkName(f.src,f.kk,f.kn,v);
+        h+='<td'+(f.t==='auto'?' class="mono"':'')+'>'+esc(v)+'</td>';
+      });
+      h+='<td style="white-space:nowrap"><button class="btn sm outline" data-edit="'+esc(key)+'">Edit</button> <button class="btn sm danger" data-del="'+esc(key)+'">Delete</button></td></tr>';
+    });
+  } else {
+    h+='<tr><td colspan="'+(fields.length+1)+'" style="text-align:center;color:var(--muted);padding:20px">No records yet.</td></tr>';
+  }
+  h+='</tbody></table>';
+  h+=pager(MPAGE,pages,'mpageGo');
+  $('entityTable').innerHTML=h;
+  Array.prototype.forEach.call($('entityTable').querySelectorAll('[data-edit]'),function(b){
+    b.onclick=function(){var k=b.getAttribute('data-edit');openForm((DATA[ENT]||[]).filter(function(x){return String(x[KEYS[ENT]])===k;})[0]);};
+  });
+  Array.prototype.forEach.call($('entityTable').querySelectorAll('[data-del]'),function(b){
+    b.onclick=function(){delRow(b.getAttribute('data-del'));};
+  });
+  wirePager('mpageGo',MPAGE,pages,function(p){MPAGE=p;renderEntity();});
+}
+
+function openForm(row){
+  var fields=FIELDS[ENT],editing=!!row;
+  var h='<h3>'+(editing?'Edit ':'Add ')+LABELS[ENT].replace(/s$/,'')+'</h3>';
+  fields.forEach(function(f){
+    var val=row?(row[f.k]==null?'':row[f.k]):'';
+    h+='<div class="field"><label>'+esc(f.k)+'</label>';
+    if(f.t==='auto') h+='<input id="f_'+f.k+'" value="'+(editing?esc(val):'(auto)')+'" readonly>';
+    else if(f.t==='bool') h+='<select id="f_'+f.k+'"><option value="TRUE"'+(String(val)!=='FALSE'?' selected':'')+'>TRUE</option><option value="FALSE"'+(String(val)==='FALSE'?' selected':'')+'>FALSE</option></select>';
+    else if(f.t==='fk') h+='<select id="f_'+f.k+'"><option value="">—</option>'+(DATA[f.src]||[]).map(function(o){return '<option value="'+esc(o[f.kk])+'"'+(String(o[f.kk])===String(val)?' selected':'')+'>'+esc(o[f.kn])+'</option>';}).join('')+'</select>';
+    else h+='<input id="f_'+f.k+'" value="'+esc(val)+'">';
+    h+='</div>';
+  });
+  h+='<div class="mactions"><button class="btn outline" id="mCancel">Cancel</button><button class="btn" id="mSave">Save</button></div>';
+  $('modal').innerHTML=h;$('overlay').classList.add('show');
+  $('mCancel').onclick=closeModal;
+  $('overlay').onclick=function(e){if(e.target===$('overlay'))closeModal();};
+  $('mSave').onclick=function(){
+    var obj={};
+    fields.forEach(function(f){
+      if(f.t==='auto'){if(editing)obj[f.k]=row[f.k];return;}
+      obj[f.k]=$('f_'+f.k).value;
+    });
+    $('mSave').disabled=true;
+    google.script.run
+      .withSuccessHandler(function(){closeModal();loadData(function(){renderEntity();});toast('Saved.');})
+      .withFailureHandler(function(e){$('mSave').disabled=false;toast(e.message,true);})
+      .adminSaveRow(ENT,obj);
+  };
+}
+
+function closeModal(){$('overlay').classList.remove('show');}
+function delRow(key){
+  if(!window.confirm('Delete this '+LABELS[ENT].replace(/s$/,'').toLowerCase()+'?')) return;
+  google.script.run
+    .withSuccessHandler(function(){loadData(function(){renderEntity();});toast('Deleted.');})
+    .withFailureHandler(function(e){toast(e.message,true);})
+    .adminDeleteRow(ENT,key);
+}
+
+/* ══════════════════════════════════════════
+   IMPORT
+══════════════════════════════════════════ */
+function updImpCols(){
+  var e=$('impEntity').value,t=TEMPLATES[e];
+  $('impCols').innerHTML='Columns: <span class="mono">'+(t?t.rows[0].join(', '):'')+'</span>';
+}
+$('genTemplateBtn').onclick=function(){
+  $('genTemplateBtn').disabled=true; setStatus('genTemplateStatus','Generating…');
+  google.script.run
+    .withSuccessHandler(function(r){
+      $('genTemplateBtn').disabled=false;
+      setStatus('genTemplateStatus','✓ Template ready — opening…',true);
+      window.open(r.url,'_blank');
+    })
+    .withFailureHandler(function(e){
+      $('genTemplateBtn').disabled=false;
+      setStatus('genTemplateStatus','✗ '+e.message,false);
+      toast(e.message,true);
+    })
+    .adminCreateImportTemplate();
+};
+
+$('impEntity').onchange=updImpCols; updImpCols();
+
+$('dlTemplateBtn').onclick=function(){
+  var entity=$('impEntity').value,tmpl=TEMPLATES[entity];
+  if(!tmpl){toast('No template for this entity.',true);return;}
+  var csv=tmpl.rows.map(function(row){return row.map(function(cell){var s=String(cell==null?'':cell);if(s.indexOf(',')>=0||s.indexOf('"')>=0)s='"'+s.replace(/"/g,'""')+'"';return s;}).join(',');}).join('\r\n');
+  var blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=entity+'_template.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  toast('Template downloaded.');
+};
+
+$('impBtn').onclick=function(){
+  var text=$('impText').value.trim();
+  if(!text){toast('Paste rows first.',true);return;}
+  $('impBtn').disabled=true;$('impResult').textContent='Importing…';
+  google.script.run
+    .withSuccessHandler(function(res){
+      $('impBtn').disabled=false;
+      $('impResult').innerHTML='<b>Added '+res.added+', updated '+res.updated+'.</b>'+(res.errors.length?'<br><span style="color:var(--red)">Errors: '+esc(res.errors.slice(0,5).join('; '))+'</span>':'');
+      loadData(function(){});toast('Import complete.');
+    })
+    .withFailureHandler(function(e){$('impBtn').disabled=false;$('impResult').textContent='';toast(e.message,true);})
+    .adminBulkImport($('impEntity').value,$('impText').value);
+};
+
+/* ══════════════════════════════════════════
+   SETTINGS — domain management
+══════════════════════════════════════════ */
+function loadDomains(){
+  google.script.run
+    .withSuccessHandler(function(domains){
+      _currentDomains=domains.slice();
+      renderDomainTags();
+    })
+    .withFailureHandler(function(e){toast(e.message,true);})
+    .adminGetOrgDomains();
+}
+
+function renderDomainTags(){
+  var h='';
+  _currentDomains.forEach(function(d,i){
+    h+='<span class="tag">@'+esc(d)+'<button onclick="removeDomain('+i+')" title="Remove">×</button></span>';
+  });
+  $('domainTags').innerHTML=h||'<span style="color:var(--muted);font-size:12px">No domains added yet.</span>';
+}
+
+function removeDomain(idx){
+  _currentDomains.splice(idx,1);
+  renderDomainTags();
+}
+
+$('addDomainBtn').onclick=function(){
+  var val=$('newDomainInput').value.trim().toLowerCase().replace(/^@/,'');
+  if(!val){toast('Enter a domain.',true);return;}
+  if(_currentDomains.indexOf(val)>=0){toast('Domain already in the list.',true);return;}
+  _currentDomains.push(val);
+  $('newDomainInput').value='';
+  renderDomainTags();
+};
+
+$('newDomainInput').onkeydown=function(e){if(e.key==='Enter'){$('addDomainBtn').click();}};
+
+$('saveDomainsBtn').onclick=function(){
+  if(!_currentDomains.length){toast('Add at least one domain.',true);return;}
+  $('saveDomainsBtn').disabled=true;setStatus('domainsStatus','Saving…');
+  google.script.run
+    .withSuccessHandler(function(r){
+      $('saveDomainsBtn').disabled=false;
+      setStatus('domainsStatus','✓ Saved: @'+r.domains.join(', @'),true);
+      toast('Domains saved.');
+    })
+    .withFailureHandler(function(e){$('saveDomainsBtn').disabled=false;setStatus('domainsStatus','✗ '+e.message,false);toast(e.message,true);})
+    .adminSaveOrgDomains(_currentDomains);
+};
+
+/* ══════════════════════════════════════════
+   LOGS TAB
+══════════════════════════════════════════ */
+function loadLogs(){
+  $('logsBody').innerHTML='<div class="spin"></div>';setStatus('logsStatus','');
+  google.script.run.withSuccessHandler(renderLogs).withFailureHandler(function(e){$('logsBody').innerHTML='<div class="hint err">'+esc(e.message)+'</div>';}).adminGetLogs();
+}
+
+function renderLogs(entries){
+  if(!entries||!entries.length){$('logsBody').innerHTML='<div class="hint">No log entries yet.</div>';return;}
+  var h='<table><thead><tr><th style="width:170px">Time</th><th style="width:60px">Level</th><th style="width:150px">Source</th><th>Message</th></tr></thead><tbody>';
+  entries.forEach(function(e){
+    var lvCss=e.lv==='ERROR'?'color:var(--red);font-weight:600':e.lv==='WARN'?'color:var(--amber);font-weight:600':'color:var(--muted)';
+    var ts=e.ts?new Date(e.ts).toLocaleString():'';
+    h+='<tr><td class="mono" style="white-space:nowrap;font-size:11px">'+esc(ts)+'</td><td class="mono" style="'+lvCss+'">'+esc(e.lv||'')+'</td><td class="mono" style="font-size:11px">'+esc(e.tg||'')+'</td><td style="font-size:12px;word-break:break-word">'+esc(e.ms||'')+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  $('logsBody').innerHTML=h;
+}
+
+$('refreshLogsBtn').onclick=function(){loadLogs();setStatus('logsStatus','Refreshed.',true);};
+$('clearLogsBtn').onclick=function(){
+  if(!window.confirm('Clear all log entries?')) return;
+  $('clearLogsBtn').disabled=true;
+  google.script.run
+    .withSuccessHandler(function(){$('clearLogsBtn').disabled=false;$('logsBody').innerHTML='<div class="hint">Log cleared.</div>';toast('Log cleared.');})
+    .withFailureHandler(function(e){$('clearLogsBtn').disabled=false;toast(e.message,true);})
+    .adminClearLogs();
+};
+
+function loadSystemInfo(){
+  $('sysInfoBody').innerHTML='<div class="spin"></div>';
+  google.script.run.withSuccessHandler(renderSystemInfo).withFailureHandler(function(e){$('sysInfoBody').innerHTML='<div class="hint err">'+esc(e.message)+'</div>';}).adminGetSystemInfo();
+}
+
+function renderSystemInfo(info){
+  function row(label,ok,detail){
+    var icon=ok===true?'<span style="color:var(--green)">✓</span>':ok===false?'<span style="color:var(--red)">✗</span>':'<span style="color:var(--amber)">?</span>';
+    return '<tr><td style="font-weight:600;white-space:nowrap;padding:6px 12px">'+esc(label)+'</td><td style="padding:6px 12px">'+icon+'</td><td class="mono" style="font-size:11px;word-break:break-all;padding:6px 12px">'+detail+'</td></tr>';
+  }
+  var h='<table style="margin-bottom:16px"><thead><tr><th>Resource</th><th>OK?</th><th>Detail</th></tr></thead><tbody>';
+  h+=row('Spreadsheet',info.spreadsheetOk,esc(info.spreadsheetId||'(not set)'));
+  h+=row('Drive root folder',info.rootFolderOk,info.rootFolderOk?'<a href="'+esc(info.rootFolderUrl)+'" target="_blank">'+esc(info.rootFolderId)+'</a>':esc(info.rootFolderId||'(not set)'));
+  h+=row('Tracker spreadsheet',info.trackerSheetOk,info.trackerSheetOk?'<a href="'+esc(info.trackerUrl)+'" target="_blank">'+esc(info.trackerSheetId)+'</a>':esc(info.trackerSheetId||'(not set)'));
+  h+=row('Master form',info.masterFormOk,esc(info.masterFormId||'(not set)'));
+  h+='</tbody></table>';
+
+  h+='<h3 class="sub" style="margin:0 0 8px">Sheet row counts</h3>';
+  h+='<table style="margin-bottom:16px"><thead><tr><th>Sheet</th><th style="text-align:right">Rows</th></tr></thead><tbody>';
+  Object.keys(info.sheetCounts||{}).forEach(function(sName){
+    var n=info.sheetCounts[sName],warn=(n==='!err'||n===0);
+    h+='<tr><td>'+esc(sName)+'</td><td style="text-align:right'+(warn?';color:var(--red)':'')+';font-family:monospace">'+esc(String(n))+'</td></tr>';
+  });
+  h+='</tbody></table>';
+
+  h+='<div class="hint">Allowed domains: <b>@'+esc((info.orgDomains||[]).join(', @'))+'</b></div>';
+  h+='<div class="hint">Last sync: <b>'+esc(info.lastSync||'Never')+'</b> | Programme forms: <b>'+esc(String(info.programmeFormsCount))+'</b>';
+  if(info.programmeForms&&info.programmeForms.length){
+    h+=' ('+info.programmeForms.map(function(f){return esc(f.programmeName)+(f.uploadFixed?'':' <span style="color:var(--amber)">⚠ needs fix</span>');}).join(', ')+')';
+  }
+  h+='</div>';
+  $('sysInfoBody').innerHTML=h;
+}
+
+/* ══════════════════════════════════════════
+   PAGINATION HELPERS
+══════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   EVIDENCE VIEWER
+══════════════════════════════════════════ */
+function initEvidenceTab(){
+  var progs   = DATA.programmes || [];
+  var classes = DATA.classes    || [];
+
+  var ph='<option value="">— All —</option>';
+  progs.forEach(function(p){
+    ph+='<option value="'+esc(p.programme_id)+'">'+esc(p.programme_name)+'</option>';
+  });
+  $('evProg').innerHTML=ph;
+
+  $('evProg').onchange=function(){ evUpdateClasses(); evUpdateUnits(); evCheckApply(); };
+  $('evClass').onchange=function(){ evUpdateUnits(); evCheckApply(); };
+  $('evUnit').onchange=evCheckApply;
+  $('evApplyBtn').onclick=evLoad;
+
+  evUpdateClasses();
+  evUpdateUnits();
+}
+
+function evUpdateClasses(){
+  var pid=$('evProg').value;
+  var list=(DATA.classes||[]).filter(function(c){
+    return !pid||String(c.programme_id)===pid;
+  });
+  var h='<option value="">— All —</option>';
+  list.forEach(function(c){ h+='<option value="'+esc(c.class_id)+'">'+esc(c.class_name)+'</option>'; });
+  $('evClass').innerHTML=h;
+}
+
+function evUpdateUnits(){
+  var pid=$('evProg').value, cid=$('evClass').value;
+  if(cid&&!pid){
+    var cls=(DATA.classes||[]).filter(function(c){return String(c.class_id)===cid;})[0];
+    if(cls) pid=String(cls.programme_id);
+  }
+  var list=(DATA.units||[]).filter(function(u){
+    return !pid||String(u.programme_id)===pid;
+  });
+  var h='<option value="">— Select a unit —</option>';
+  list.forEach(function(u){ h+='<option value="'+esc(u.unit_id)+'">'+esc(u.unit_code)+' — '+esc(u.unit_name)+'</option>'; });
+  $('evUnit').innerHTML=h;
+  evCheckApply();
+}
+
+function evCheckApply(){
+  $('evApplyBtn').disabled=!($('evUnit').value&&($('evProg').value||$('evClass').value));
+}
+
+function evLoad(){
+  var pid=$('evProg').value||null, cid=$('evClass').value||null, uid=$('evUnit').value;
+  $('evResults').innerHTML='<div class="spin"></div>';
+  $('evApplyBtn').disabled=true;
+  google.script.run
+    .withSuccessHandler(function(students){ $('evApplyBtn').disabled=false; evRender(students,uid); })
+    .withFailureHandler(function(e){ $('evApplyBtn').disabled=false; $('evResults').innerHTML='<div class="hint err">'+esc(e.message)+'</div>'; toast(e.message,true); })
+    .adminGetEvidenceStudents(pid,cid,uid);
+}
+
+function evRender(students,uid){
+  if(!students.length){
+    $('evResults').innerHTML='<div class="hint" style="margin-top:12px">No submitted students found for the selected filters.</div>';
+    return;
+  }
+  var u=(DATA.units||[]).filter(function(x){return String(x.unit_id)===String(uid);})[0];
+  var uLabel=u?(esc(u.unit_code)+' — '+esc(u.unit_name)):esc(uid);
+  var h='<h2 class="sec" style="margin-top:12px">'+students.length+' student(s) &nbsp;·&nbsp; '+uLabel+'</h2>';
+  h+='<table><thead><tr><th>Name</th><th>Admission No.</th><th>Class</th><th>Programme</th><th>First Submission</th><th></th></tr></thead><tbody>';
+  students.forEach(function(s){
+    var date=s.firstSubmissionDate?new Date(s.firstSubmissionDate).toLocaleDateString():'—';
+    h+='<tr>';
+    h+='<td><b>'+esc(s.name)+'</b><br><span style="color:var(--muted);font-size:11px">'+esc(s.email)+'</span></td>';
+    h+='<td class="mono">'+esc(s.admissionNo||'—')+'</td>';
+    h+='<td>'+esc(s.className)+'</td>';
+    h+='<td>'+esc(s.programme)+'</td>';
+    h+='<td style="font-size:12px;white-space:nowrap">'+esc(date)+'</td>';
+    h+='<td><button class="btn sm" onclick="evPreview(\''+esc(s.studentId)+'\',\''+esc(s.name)+'\',\''+esc(uid)+'\',\''+uLabel+'\')">Preview</button></td>';
+    h+='</tr>';
+  });
+  h+='</tbody></table>';
+  $('evResults').innerHTML=h;
+}
+
+function evPreview(studentId,studentName,unitId,unitLabel){
+  $('evModal').innerHTML=
+    '<div class="ev-head">'
+      +'<div><div style="font-family:\'Fraunces\',serif;font-size:18px;font-weight:600">'+esc(studentName)+'</div>'
+      +'<div style="color:var(--muted);font-size:12px;margin-top:2px">'+unitLabel+'</div></div>'
+      +'<button class="btn outline sm" onclick="evClose()">Close</button>'
+    +'</div>'
+    +'<div class="row" style="gap:10px;align-items:center">'
+      +'<select id="evAssess" style="flex:1"><option>Loading…</option></select>'
+      +'<a id="evDriveLink" href="#" target="_blank" tabindex="-1"><button class="btn outline sm" type="button">Open in Drive ↗</button></a>'
+    +'</div>'
+    +'<iframe id="evFrame" class="ev-iframe" src="about:blank"></iframe>';
+
+  $('evOverlay').classList.add('show');
+  $('evOverlay').onclick=function(e){if(e.target===$('evOverlay'))evClose();};
+
+  google.script.run
+    .withSuccessHandler(function(files){
+      if(!files.length){
+        $('evAssess').innerHTML='<option>No submissions found for this unit</option>';
+        return;
+      }
+      $('evAssess').innerHTML=files.map(function(f){
+        return '<option value="'+esc(f.fileId)+'" data-prev="'+esc(f.previewUrl)+'" data-url="'+esc(f.driveUrl)+'">'+esc(f.label)+'</option>';
+      }).join('');
+      evLoadFrame();
+      $('evAssess').onchange=evLoadFrame;
+    })
+    .withFailureHandler(function(e){
+      $('evAssess').innerHTML='<option>Error: '+esc(e.message)+'</option>';
+      toast(e.message,true);
+    })
+    .adminGetStudentUnitFiles(studentId,unitId);
+}
+
+function evLoadFrame(){
+  var sel=$('evAssess'), opt=sel.options[sel.selectedIndex];
+  if(!opt||!opt.getAttribute('data-prev')) return;
+  $('evFrame').src=opt.getAttribute('data-prev');
+  $('evDriveLink').href=opt.getAttribute('data-url');
+}
+
+function evClose(){
+  $('evOverlay').classList.remove('show');
+  if($('evFrame')) $('evFrame').src='about:blank';
+}
+
+/* ══════════════════════════════════════════
+   PAGINATION HELPERS
+══════════════════════════════════════════ */
+function pager(current,total,id){
+  return '<div class="paging"><button data-pager="'+id+'" data-dir="-1"'+(current<=1?' disabled':'')+'>← Prev</button><span class="pinfo">Page '+current+' of '+total+'</span><button data-pager="'+id+'" data-dir="1"'+(current>=total?' disabled':'')+'>Next →</button></div>';
+}
+function wirePager(id,current,total,cb){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-pager="'+id+'"]'),function(b){
+    b.onclick=function(){var d=parseInt(b.getAttribute('data-dir')),np=current+d;if(np<1||np>total)return;cb(np);};
+  });
+}
+</script>
+</body>
+</html>

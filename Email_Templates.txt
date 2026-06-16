@@ -1,0 +1,191 @@
+================================================================================
+EVIDENCE SUBMISSION SYSTEM — EMAIL TEMPLATES (REVISED)
+================================================================================
+Note: Reuse the shared {SIGNATURE} block (defined at the end) at the foot of
+every email for consistency. Apps Script placeholders are left intact.
+
+
+--------------------------------------------------------------------------------
+1. REGISTRATION CONFIRMED
+   Function: notifyRegistrationSuccess_   (Intake_Form.js:85)
+   Trigger : Student registers successfully.
+--------------------------------------------------------------------------------
+
+Subject:
+Registration Confirmed — Evidence Submission
+
+Body:
+Hello {name},
+
+Your registration has been confirmed, and you are now set up to begin
+submitting evidence for your programme.
+
+Use the link below to access your evidence submission form:
+{programme form link where this student belongs}
+
+We recommend bookmarking this link for easy access throughout the term.
+
+{SIGNATURE}
+
+
+--------------------------------------------------------------------------------
+2. REGISTRATION ERROR
+   Function: notifyRegistrationError_   (Intake_Form.js:100)
+   Trigger : Registration fails.
+   Subject is always the same; the "What happened" / "What to do next"
+   sections change depending on the error.
+--------------------------------------------------------------------------------
+
+Subject:
+Registration — Action Required
+
+Body template:
+Hello,
+
+We were unable to complete your registration. Please review the details
+below and take the recommended steps.
+
+What happened:
+{intro}
+
+What to do next:
+{steps}
+
+{SIGNATURE}
+
+
+........................................
+BRANCH A — email already registered
+(error message contains "already registered")
+........................................
+{intro}:
+The email address {toEmail} is already registered in the system, so no new
+registration is required.
+
+{steps}:
+Your account is active — simply open your programme submission form to begin
+submitting evidence. No further action is needed.
+
+
+........................................
+BRANCH B — any other error
+........................................
+{intro}:
+Your registration could not be completed due to an unexpected issue.
+
+{steps}:
+Please contact your administrator and quote the following reference so the
+issue can be resolved quickly: "{msg}"
+
+
+--------------------------------------------------------------------------------
+3. EVIDENCE RECEIVED
+   Function: notifySubmissionSuccess_   (Intake_Form.js:273)
+   Trigger : Evidence submission saved successfully.
+--------------------------------------------------------------------------------
+
+Subject:
+Evidence Received — {unit_code} — {unit_name}
+
+Body:
+Hello {studentName or toEmail},
+
+Your evidence has been received and saved successfully. Please retain this
+email as confirmation of your submission.
+
+Evidence folder: {Link to the student folder given view access only,}
+Submission summary
+  Unit:   {unit_code} — {unit_name}
+  Files:  {count} received
+    • {assessmentType}
+    • {assessmentType}
+    ... (one line per submitted file)
+
+If any file appears to be missing or incorrect, please contact the administrator as soon as possible.
+
+{SIGNATURE}
+
+
+--------------------------------------------------------------------------------
+4. SUBMISSION ERROR
+   Function: notifySubmissionError_   (Intake_Form.js:368)
+   Trigger : Evidence submission fails.
+   Subject is always the same; the "What happened" / "What to do next"
+   sections change depending on the error.
+--------------------------------------------------------------------------------
+
+Subject:
+Evidence Submission — Action Required
+
+Body template:
+Hello,
+
+Your submission was received but could not be processed. Please review the
+details below and take the recommended steps.
+
+What happened:
+{intro}
+
+What to do next:
+{steps}
+
+{SIGNATURE}
+
+
+........................................
+BRANCH A — email not registered
+(error message contains "not registered")
+........................................
+{intro}:
+The email address {toEmail} was not found in the student register, so your
+evidence could not be linked to a record.
+
+{steps}:
+1. Complete your registration using this link: {registration form link}
+2. Once registered, re-open the submission form and submit your evidence again.
+
+
+........................................
+BRANCH B — no files uploaded
+(error message contains "No files were uploaded")
+........................................
+{intro}:
+Your submission was received, but no files were attached.
+
+{steps}:
+1. Re-open the submission form.
+2. Attach at least one file in the upload section.
+3. Submit again.
+
+
+........................................
+BRANCH C — any other error
+(includes "Your student record is missing a class/programme.",
+ "Please select a unit.", "Unit not found", "does not belong to your
+ programme", etc. — the underlying message is quoted)
+........................................
+{intro}:
+Your submission could not be processed due to an unexpected issue.
+
+{steps}:
+Please contact the administrator and quote the following reference so the
+issue can be resolved quickly: "{msg}"
+
+
+--------------------------------------------------------------------------------
+SHARED SIGNATURE BLOCK — {SIGNATURE}
+   Reuse at the foot of every email.
+--------------------------------------------------------------------------------
+
+Kind regards,
+
+ICT Department - MIS Officer,
+The Rift Valley National Polytechnic.
+
+
+This is an automated message — please do not reply directly to this email.
+For assistance, contact the administrator.
+
+================================================================================
+END OF EMAIL TEMPLATES
+================================================================================
